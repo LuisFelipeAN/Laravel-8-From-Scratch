@@ -22,7 +22,7 @@ class Post
     }
     
     public static function find($slug){
-       return static::all()->firstWhere('slug',$slug);
+        return static::all()->firstWhere('slug',$slug);
         /**
         $path = resource_path("/posts/{$slug}.html");
         if(!file_exists($path)){
@@ -30,6 +30,14 @@ class Post
         }
         return cache()->remember("posts.{$slug}",1200, fn() =>  file_get_contents($path));
         //*/
+    }
+
+    public static function findOrFail($slug){
+        $post =  static::find($slug);
+        if(!$post){
+            throw new ModelNotFoundException();
+        }
+       return $post;
     }
 
     public static function all(){
