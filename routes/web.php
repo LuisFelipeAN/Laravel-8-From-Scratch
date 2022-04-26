@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
+use App\Models\Category;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,5 +28,10 @@ Route::get('/posts/{post}',function (Post $post) {
         'post'=>$post
     ]);
 
-    
+});
+
+Route::get('categories/{category:slug}',function(Category $category){
+    return view('posts',[
+        'posts'=>$category->posts
+    ]);
 });
