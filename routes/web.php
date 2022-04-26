@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\Category;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,9 +17,16 @@ use App\Models\Category;
 */
 
 Route::get('/', function () {
+    /**
+     DB::listen(function($query){
+        logger($query->sql,$query->bindings);
+    });
+    //*/
+
     /**/
+   
     return view('posts',[
-        'posts'=>   Post::all() 
+        'posts'=>   Post::with('category')->get() 
     ]);
     //*/
 });
