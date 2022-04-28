@@ -16,8 +16,6 @@ class PostController extends Controller
 
     public function show(Post $post){
         return view('post.show',[
-            'post'=>$post,
-            'categories'=>Category::all() 
-        ]);
+            'post'=>$post ]);
     }
 }
