@@ -1,7 +1,8 @@
 <x-drop-down>
     <x-drop-down-item href="/" :active="request()->routeIs('home')"> All</x-drop-down-item>
     @foreach ($categories as $category )
-        <x-drop-down-item href="/?category={{$category->slug}}" :active="isset($currentCategory)&&$currentCategory->is($category)">
+        <x-drop-down-item href="/?category={{$category->slug}}&{{http_build_query(request()->except('category'))}}" 
+        :active="isset($currentCategory)&&$currentCategory->is($category)">
             {{$category->name}}</x-drop-down-item>
     @endforeach
 
