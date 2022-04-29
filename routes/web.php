@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,8 +21,5 @@ use App\Http\Controllers\PostController;
 
 Route::get('/', [PostController::class,'index'])->name('home');
 Route::get('/posts/{post:slug}', [PostController::class,'show']);
-
-Route::get('authors/{author:username}',function(User $author){
-    return view('post.index',[
-        'posts'=>$author->posts->load(['category','author'])]);
-});
+Route::get('register',[RegisterController::class,'create']);
+Route::post('register',[RegisterController::class,'store']);
