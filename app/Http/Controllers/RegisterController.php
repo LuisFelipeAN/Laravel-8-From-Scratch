@@ -18,7 +18,8 @@ class RegisterController extends Controller
             'password'=>'required|min:8'
         ]);
 
-        User::create($attributes);
+        $user=User::create($attributes);
+        auth()->login($user);
         return redirect('/')->with('success','Your accound has been created!');
     }
 }
