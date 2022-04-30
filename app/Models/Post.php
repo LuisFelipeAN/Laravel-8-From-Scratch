@@ -8,8 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    protected $guarded =[];
-    //protected $fillable=['title','exerpt','body'];
+
     protected $with=['author','category'];
 
     public function comments(){
