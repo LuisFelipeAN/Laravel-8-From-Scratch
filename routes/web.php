@@ -10,6 +10,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostCommentController;
+use Dotenv\Exception\ValidationException;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,17 +36,24 @@ Route::post('sessions',[SessionController::class,'store'])->middleware('guest');
 
 Route::post('logout',[SessionController::class,'destroy'])->middleware('auth');
 
-Route::get('ping',function(){
+Route::post('newsletter',function(){
+    request()->validate(['email'=>'required|email']);
     $mailchimp = new MailchimpMarketing\ApiClient();
 
     $mailchimp->setConfig([
         'apiKey' => config('services.mailchimp.key'),
         'server' => 'us18'
     ]);
-    //c8f0ee1df3
-    $response = $mailchimp->lists->addListMember('c8f0ee1df3',[
-        'email_address'=>'luis.felipe.almeida.nascimento@gmail.com',
-        'status'=>'subscribed'
-    ]);
-    return $response;
+    try{
+        $response = $mailchimp->lists->addListMember('c8f0ee1df3',[
+            'email_address'=>request('email'),
+            'status'=>'subscribed'
+        ]);
+    } catch (Exception $e) {
+        throw Illuminate\Validation\ValidationException::withMessages([
+            'email'=>'This email could no be added to our newsleter.'
+        ]);
+    }
+    
+    return redirect('/')->with('success','You are now signed up for our news letter.');
 });
