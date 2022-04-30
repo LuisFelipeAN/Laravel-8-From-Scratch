@@ -34,3 +34,18 @@ Route::get('login',[SessionController::class,'create'])->middleware('guest');
 Route::post('sessions',[SessionController::class,'store'])->middleware('guest');
 
 Route::post('logout',[SessionController::class,'destroy'])->middleware('auth');
+
+Route::get('ping',function(){
+    $mailchimp = new MailchimpMarketing\ApiClient();
+
+    $mailchimp->setConfig([
+        'apiKey' => config('services.mailchimp.key'),
+        'server' => 'us18'
+    ]);
+    //c8f0ee1df3
+    $response = $mailchimp->lists->addListMember('c8f0ee1df3',[
+        'email_address'=>'luis.felipe.almeida.nascimento@gmail.com',
+        'status'=>'subscribed'
+    ]);
+    return $response;
+});
