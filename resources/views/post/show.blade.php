@@ -50,28 +50,7 @@
                 </div>
             </article>
             <section class="col-span-8 col-start-5 mt-10 space-y-6">
-                @auth
-                    <x-panel>
-                        <form action="/posts/{{$post->slug}}/comments" method="POST">
-                            @csrf
-                            <header class="flex items-center">
-                                <img src="https://i.pravatar.cc/40?u={{auth()->id()}}" alt="" width="40" height="40" class="rounded-full">
-                                Whant to participate?
-                            </header>
-                            <div class="mt-6">
-                                <textarea name="body" class="w-full text-sm focus:outiline-none focus:ring" id="" cols="30" rows="10" placeholder="Say Something"></textarea>
-                            </div>
-                            <div class="flex justify-end mt-6 border-t border-gray-200 pt-6">
-                                <button type="submit" class="bg-blue-500 text-white uppercase font-semibolt text-xs py-2 px-10 rounded-2xl hover:bg-blue-600">Post</button>
-                            </div>
-                        </form>
-                    </x-panel> 
-                @else
-                    <p class="font-semibold">
-                        <a class="hover:underline" href="/register"> Register </a> or <a class="hover:underline"  href="/login"> Log in</a> to leave a comment Comment! 
-                    </p>
-                    
-                @endauth
+                @include('post._add-comment-form')
                 @foreach ($post->comments as $comment )
                     <x-post-comment :comment="$comment"/>
                 @endforeach
