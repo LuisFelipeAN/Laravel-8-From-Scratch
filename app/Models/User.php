@@ -42,6 +42,10 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function comments(){
+        return $this->hasMany(Comment::class);
+    }
+
     public function setPasswordAttribute($password){//Mutator
         $this->attributes['password']=bcrypt($password);
     }
