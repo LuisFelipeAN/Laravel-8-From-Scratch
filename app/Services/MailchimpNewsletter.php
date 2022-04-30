@@ -1,24 +1,21 @@
 <?php
 namespace App\Services;
 use MailchimpMarketing\ApiClient;
-class Newsletter
+use App\Services\INewsletter;
+class MailchimpNewsletter implements INewsletter
 {
+    public function __construct(protected ApiClient $client){
+
+    }
     public function subscribe(string $email, string $list = null){
 
         $list ??=config('services.mailchimp.lists.subscribers');
-        return $this->getClient()->lists->addListMember($list ,[
+        return $this->client->lists->addListMember($list ,[
             'email_address'=>$email,
             'status'=>'subscribed'
         ]);
     }
     public function unSubscibe(string $email){
         
-    }
-
-    protected function getClient(){
-        return (new ApiClient())->setConfig([
-            'apiKey' => config('services.mailchimp.key'),
-            'server' => 'us18'
-        ]);
     }
 }
