@@ -19,14 +19,7 @@ class AdminPostController extends Controller
     }
 
     public function store(){
-        $atttributes = request()->validate([
-            'title' =>'required',
-            'thumbnail'=>'required|image',
-            'exerpt' =>'required',
-            'body' =>'required',
-            'category_id' => ['required',Rule::exists('categories','id')],
-            'slug' => ['required', Rule::unique('posts','slug')]
-        ]);
+        $atttributes = $this->validatePost();
         $atttributes['user_id']=auth()->id();
         $atttributes['thumbnail']=request()->file('thumbnail')->store('thumbnails');
         Post::create($atttributes);
@@ -40,14 +33,7 @@ class AdminPostController extends Controller
     }
 
     public function update(Post $post){
-        $atttributes = request()->validate([
-            'title' =>'required',
-            'thumbnail'=>'image',
-            'exerpt' =>'required',
-            'body' =>'required',
-            'category_id' => ['required',Rule::exists('categories','id')],
-            'slug' => ['required', Rule::unique('posts','slug')->ignore($post->id)]
-        ]);
+        $atttributes = $this->validatePost( $post);
         if(isset( $atttributes['thumbnail'])){
             $atttributes['thumbnail']=request()->file('thumbnail')->store('thumbnails');
         }
@@ -58,5 +44,17 @@ class AdminPostController extends Controller
     public function destroy(Post $post){
         $post->delete();
         return back()->with('success','Post Deleted!');
+    }
+
+    protected function validatePost(?Post $post=null){
+        $post??=new Post();
+        return request()->validate([
+            'title' =>'required',
+            'thumbnail'=> $post->exists ? 'image':['required','image'],
+            'exerpt' =>'required',
+            'body' =>'required',
+            'category_id' => ['required',Rule::exists('categories','id')],
+            'slug' => ['required', Rule::unique('posts','slug')->ignore($post)]
+        ]);
     }
 }
